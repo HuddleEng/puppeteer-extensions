@@ -1,0 +1,19 @@
+{
+  "name": "puppeteer-extensions",
+  "version": "1.0.0",
+  "description": "Convenience functions for the Puppeteer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HuddleEng/puppeteer-extensions.git"
+  },
+  "author": "Gideon Pyzer / Huddle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HuddleEng/puppeteer-extensions/issues"
+  },
+  "homepage": "https://github.com/HuddleEng/puppeteer-extensions#readme"
+}
