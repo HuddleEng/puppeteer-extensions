@@ -15,7 +15,7 @@ const extensions = require('puppeteer-extensions')(page);
 (async() {
     const listItem = '.todo-list li';
     ...
-    await page.extensions.waitForNthSelectorAttributeValue(listItem, 1, 'class', 'completed');
+    await extensions.waitForNthSelectorAttributeValue(listItem, 1, 'class', 'completed');
 })();
 
 ```

@@ -4,7 +4,8 @@
   "description": "Convenience functions for the Puppeteer",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest /tests",
+    "postinstall": "node tests/setup.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/HuddleEng/puppeteer-extensions/issues"
   },
-  "homepage": "https://github.com/HuddleEng/puppeteer-extensions#readme"
+  "homepage": "https://github.com/HuddleEng/puppeteer-extensions#readme",
+  "devDependencies": {
+    "colors": "^1.1.2",
+    "express": "^4.16.2",
+    "extract-zip": "^1.6.6",
+    "jest": "^22.4.2",
+    "puppeteer": "^1.1.1"
+  }
 }
