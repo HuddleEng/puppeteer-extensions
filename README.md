@@ -57,13 +57,6 @@ Wait for a specific number of web fonts to be loaded and ready on the page
 Wait for function to execute on the page (see [waitForFunction](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforfunctionpagefunction-options-args))
 
 
-**waitForSelector(selector, timeout=defaultTimeout)**
-- `selector` \<string> The selector for the element on the page
-- `timeout` \<number> Timeout for the check
-
-Wait for element with a given selector to exist on the page (see [waitForSelector](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforselectorselector-options))
-
-
 **waitUntilExistsAndVisible(selector)**
 - `selector` \<string> The selector for the element on the page
 
@@ -127,6 +120,12 @@ Wait for the element found from the selector has a particular attribute value pa
 Wait for the element count to be a particular value
 
 
+**waitForDocumentTitle(title)**
+- `title` \<string> The expected title of the document
+
+Wait for the document title to be a particular string
+
+
 **waitForUrl(regex)**
 - `regex` \<RegExp> The regular expression to match the URL on
 
@@ -174,6 +173,12 @@ Check if element is focused
 **turnOffAnimations()**
 
 Turn off CSS animations on the page to help avoid flaky visual comparisons
+
+
+**fastForwardTime(milliseconds)**
+- `milliseconds` \<number> The number of milliseconds to fast forward
+
+Fast forward the current time by a given number of milliseconds
 
 
 **evaluate(fn, ...args)**
