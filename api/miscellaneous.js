@@ -32,6 +32,25 @@ module.exports = puppeteerPage => ({
         })
     },
     /**
+     * Fast forward the current time by a given number of milliseconds
+     * @param {number} milliseconds - The number of milliseconds to fast forward
+     */
+    async fastForwardTime(milliseconds) {
+        return puppeteerPage.evaluate(milliseconds => {
+            window.__oldDate = Date;
+
+            function hackyDate() {
+                return new window.__oldDate((new window.__oldDate()).getTime() + milliseconds);
+            }
+
+            hackyDate.now = () => {
+                return hackyDate().getTime();
+            };
+
+            window.Date = hackyDate;
+        }, milliseconds);
+    },
+    /**
      * Run a function on the page
      * @param {function} fn - The function to execute on the page
      * @param {...args} args - Arguments to be passed into the function

@@ -111,15 +111,6 @@ module.exports = (puppeteerPage, requests, defaultTimeout) => ({
         return puppeteerPage.waitForFunction(fnStr, options);
     },
     /**
-     * Wait for element with a given selector to exist on the page
-     * @param {string} selector - The selector for the element on the page
-     * @param {number] [timeout=defaultTimeout] - Timeout for the check
-     * @see https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforselectorselector-options
-     */
-    async waitForSelector(selector, timeout = defaultTimeout) {
-        return puppeteerPage.waitForSelector(selector, { timeout: timeout });
-    },
-    /**
      * Wait until an element exists on the page and is visible (i.e. not transparent)
      * @param {string} selector - The selector for the element on the page
      * @see https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforselectorselector-options
@@ -208,6 +199,16 @@ module.exports = (puppeteerPage, requests, defaultTimeout) => ({
         return puppeteerPage.waitForFunction((selector, expectedCount) => {
             return document.querySelectorAll(selector).length === expectedCount;
         }, { timeout: defaultTimeout}, selector, expectedCount);
+    },
+    /**
+     * Wait for the document title to be a particular string
+     * @param {string} title - The expected title of the document
+     */
+    async waitForDocumentTitle(title) {
+        return puppeteerPage.waitForFunction(title => {
+            const actualTitle = document.title;
+            return actualTitle === title;
+        }, {timeout: defaultTimeout}, title);
     },
     /**
      * Wait for the current window location to match a particular regular expression
