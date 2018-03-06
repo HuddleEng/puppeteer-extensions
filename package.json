@@ -2,9 +2,9 @@
   "name": "puppeteer-extensions",
   "version": "1.0.0",
   "description": "Convenience functions for the Puppeteer",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/HuddleEng/puppeteer-extensions/issues"
   },
-  "homepage": "https://github.com/HuddleEng/puppeteer-extensions#readme"
+  "homepage": "https://github.com/HuddleEng/puppeteer-extensions#readme",
+  "devDependencies": {
+    "ts-node": "^5.0.1",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.9.0",
+    "tslint-config-standard": "^7.0.0",
+    "typescript": "^2.7.2"
+  }
 }

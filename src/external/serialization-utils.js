@@ -69,7 +69,7 @@ const quoteString = str => {
 };
 
 // Source: from https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L354-L388
-module.exports = function serializeFunctionWithArgs(fn, ...args) {
+export function serializeFunctionWithArgs(fn, ...args) {
     if (!(fn instanceof Function || typeof fn === 'string' || fn instanceof String)) {
         throw Error('Wrong use of evaluate');
     }
