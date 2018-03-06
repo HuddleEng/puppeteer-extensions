@@ -1,4 +1,6 @@
 # puppeteer-extensions
+[![Build Status](https://travis-ci.org/HuddleEng/puppeteer-extensions.svg?branch=master)](https://travis-ci.org/HuddleEng/puppeteer-extensions)
+
 This library exposes a number of convenience functions to extend Puppeteer's API, in order to make writing tests easier.
 The idea is that many of these functions (or similar ones) will eventually make their way into Puppeteer's own API, but 
 this allows us to experiment with new ways of improving UI testing.
