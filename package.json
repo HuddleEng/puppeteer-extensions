@@ -4,7 +4,9 @@
   "description": "Convenience functions for the Puppeteer",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest /tests",
+    "postinstall": "node tests/setup.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,11 @@
   },
   "homepage": "https://github.com/HuddleEng/puppeteer-extensions#readme",
   "devDependencies": {
+    "colors": "^1.1.2",
+    "express": "^4.16.2",
+    "extract-zip": "^1.6.6",
+    "jest": "^22.4.2",
+    "puppeteer": "^1.1.1",
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.9.0",
