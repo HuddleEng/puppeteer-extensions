@@ -10,7 +10,7 @@
  * Copyright (C) 2011 James Roe <roejames12@hotmail.com>
  * Copyright (C) 2011 execjosh, http://execjosh.blogspot.com
  * Copyright (C) 2012 James M. Greene <james.m.greene@gmail.com>
-**/
+ */
 
 // Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L205
 const detectType = (value: any) => {
@@ -33,7 +33,11 @@ const detectType = (value: any) => {
 
 // Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L167
 const quoteString = (str: string) => {
-    let c, i, l = str.length, o = '"';
+    let c;
+    let i;
+    let l = str.length;
+    let o = '"';
+
     for (i = 0; i < l; i += 1) {
         c = str.charAt(i);
         if (c >= ' ') {
@@ -80,14 +84,14 @@ export function serializeFunctionWithArgs(fn: any, ...args: any[]) {
         let argType = detectType(arg);
 
         switch (argType) {
-            case 'object':      //< for type "object"
-            case 'array':       //< for type "array"
+            case 'object':      // < for type "object"
+            case 'array':       // < for type "array"
                 str += JSON.stringify(arg) + ',';
                 break;
-            case 'date':        //< for type "date"
+            case 'date':        // < for type "date"
                 str += 'new Date(' + JSON.stringify(arg) + '),';
                 break;
-            case 'string':      //< for type "string"
+            case 'string':      // < for type "string"
                 str += quoteString(arg) + ',';
                 break;
             default:            // for types: "null", "number", "function", "regexp", "undefined"

@@ -2,7 +2,7 @@
  *
  * This file represents the waits API. It exposes useful polling functions for particular resources or selectors
  *
- **/
+ */
 
 import {serializeFunctionWithArgs} from '../external/serialization-utils';
 import {Request, Page} from "puppeteer";
@@ -26,7 +26,7 @@ const pollFor = ({checkFn, interval, timeout, timeoutMsg} : {checkFn: () => Prom
 
 const isSuccessfulResponse = (request: Request) : boolean => {
     const response = request.response && request.response();
-    return response && (response.status() === 200 || response.status() === 304);
+    return response && (response.status() === 200 || response.status() === 304) || false;
 };
 
 export function init (puppeteerPage: Page, requests, defaultTimeout) : object {
@@ -35,7 +35,7 @@ export function init (puppeteerPage: Page, requests, defaultTimeout) : object {
          * Wait for a resource request to be responded to
          * @param {string} resource - The URL of the resource (or a substring of it)
          * @param {number] [timeout=defaultTimeout] - Timeout for the check
-     */
+         */
         waitForResource (resource: string, timeout : number = defaultTimeout) {
             return new Promise((resolve, reject) => {
 
@@ -49,7 +49,7 @@ export function init (puppeteerPage: Page, requests, defaultTimeout) : object {
                 } else {
                     pollFor({
                         checkFn: async () => {
-                            return await resourceRequestHasResponded();
+                            return resourceRequestHasResponded();
                         },
                         interval: 100,
                         timeout: timeout,
@@ -62,7 +62,7 @@ export function init (puppeteerPage: Page, requests, defaultTimeout) : object {
          * Wait for a specific number of web fonts to be loaded and ready on the page
          * @param {number} count - The number of web fonts to expect
          * @param {number] [timeout=defaultTimeout] - Timeout for the check
-     */
+         */
         async waitForLoadedWebFontCountToBe(count: number, timeout : number = defaultTimeout) {
             let hasInjectedWebFontsAllLoadedFunction = false;
 
@@ -82,8 +82,13 @@ export function init (puppeteerPage: Page, requests, defaultTimeout) : object {
                         });
                     } else {
                         await puppeteerPage.evaluate(() => {
-                            (async function() {
-                                window.__webFontsAllLoaded = await document.fonts.ready;
+                            return (async function() {
+                                try {
+                                    window.__webFontsAllLoaded = await document.fonts.ready;
+                                } catch (e) {
+                                    return false;
+                                }
+
                             })();
                         });
 

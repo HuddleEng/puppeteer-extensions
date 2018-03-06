@@ -4,10 +4,10 @@
   "description": "Convenience functions for the Puppeteer",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npm run lint && tsc",
     "test": "npm run build && jest /tests",
-    "postinstall": "node tests/setup.js"
-    "lint": "tslint -t codeFrame 'src/**/*.ts'"
+    "postinstall": "node tests/setup.js",
+    "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts'"
   },
   "repository": {
     "type": "git",

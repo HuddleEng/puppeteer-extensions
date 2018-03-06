@@ -2,7 +2,7 @@
  *
  * This file represents the retrieval API. It exposes convenience functions for getting properties/values/state from the UI.
  *
- **/
+ */
 
 import {Page} from "puppeteer";
 

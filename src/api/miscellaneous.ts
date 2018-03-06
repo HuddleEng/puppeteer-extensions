@@ -2,7 +2,8 @@
  *
  * This file represents the miscellaneous API. It exposes functions that don't fit under a particular category.
  *
- **/
+ */
+
 import {serializeFunctionWithArgs} from '../external/serialization-utils';
 import {Page} from "puppeteer";
 
