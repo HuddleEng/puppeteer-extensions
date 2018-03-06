@@ -1,16 +1,17 @@
 import {init as setupWaits} from './api/waits';
 import {init as setupRetrieval} from './api/retrieval';
 import {init as setupMiscellaneous} from './api/miscellaneous';
+import {Request} from "puppeteer";
 
-const DEFAULT_TIMEOUT_MS = 5000;
-let resourceRequests = [];
+const DEFAULT_TIMEOUT_MS : number = 5000;
+let resourceRequests : Request[] = [];
 
-export function init (puppeteerInstance, timeout = DEFAULT_TIMEOUT_MS) {
-    puppeteerInstance.on('request', request => {
+function init(puppeteerInstance: any, timeout : number = DEFAULT_TIMEOUT_MS) {
+    puppeteerInstance.on('request', (request: Request) => {
         resourceRequests.push(request);
     });
 
-    const resetRequests = () => {
+    const resetRequests = () : void => {
         resourceRequests = [];
     };
 
@@ -20,3 +21,5 @@ export function init (puppeteerInstance, timeout = DEFAULT_TIMEOUT_MS) {
         setupMiscellaneous(puppeteerInstance),
     );
 }
+
+export = init;

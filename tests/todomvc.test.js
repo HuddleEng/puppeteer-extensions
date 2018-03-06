@@ -21,7 +21,7 @@ beforeAll(async () => {
     serverInstance = await server.start(3000);
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    extensions = require('../index')(page);
+    extensions = require('../lib/index')(page);
     await page.goto('http://localhost:3000');
 });
 

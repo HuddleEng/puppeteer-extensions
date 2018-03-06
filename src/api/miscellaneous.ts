@@ -3,14 +3,15 @@
  * This file represents the miscellaneous API. It exposes functions that don't fit under a particular category.
  *
  **/
-import serializeFunctionWithArgs from '../external/serialization-utils';
+import {serializeFunctionWithArgs} from '../external/serialization-utils';
+import {Page} from "puppeteer";
 
-export function init (puppeteerPage) {
+export function init (puppeteerPage: Page) : object {
     return {
         /**
          * Turn off CSS animations on the page to help avoid flaky visual comparisons
          */
-        async turnOffAnimations () {
+        async turnOffAnimations() {
             return puppeteerPage.evaluate(() => {
                 function disableAnimations() {
                     const {jQuery} = window;
@@ -35,7 +36,7 @@ export function init (puppeteerPage) {
          * Fast forward the current time by a given number of milliseconds
          * @param {number} milliseconds - The number of milliseconds to fast forward
          */
-        async fastForwardTime(milliseconds) {
+        async fastForwardTime(milliseconds: number) {
             return puppeteerPage.evaluate(milliseconds => {
                 window.__oldDate = Date;
 
@@ -59,7 +60,7 @@ export function init (puppeteerPage) {
          * @param {function} fn - The function to execute on the page
          * @param {...args} args - Arguments to be passed into the function
          */
-        async evaluate(fn, ...args) {
+        async evaluate(fn: () => any, ...args: any[]) {
             const fnStr = serializeFunctionWithArgs(fn, ...args);
             return puppeteerPage.evaluate(fnStr);
         }

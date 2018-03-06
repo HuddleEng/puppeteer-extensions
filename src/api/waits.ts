@@ -4,16 +4,17 @@
  *
  **/
 
-import serializeFunctionWithArgs from '../external/serialization-utils';
+import {serializeFunctionWithArgs} from '../external/serialization-utils';
+import {Request, Page} from "puppeteer";
 
-const pollFor = ({checkFn, interval, timeout, timeoutMsg} : {checkFn: () => Promise<boolean>, interval: number, timeout: number, timeoutMsg: string}) => {
+const pollFor = ({checkFn, interval, timeout, timeoutMsg} : {checkFn: () => Promise<boolean>, interval: number, timeout: number, timeoutMsg: string}) : Promise<string> => {
     return new Promise((resolve, reject) => {
         const startTime = new Date().getTime();
         const timer = setInterval(async () => {
             if ((new Date().getTime() - startTime) < timeout) {
                 if (await checkFn()) {
                     clearInterval(timer);
-                    resolve();
+                    resolve('Finished polling');
                 }
             } else {
                 clearInterval(timer);
@@ -23,22 +24,22 @@ const pollFor = ({checkFn, interval, timeout, timeoutMsg} : {checkFn: () => Prom
     });
 };
 
-const isSuccessfulResponse = request => {
+const isSuccessfulResponse = (request: Request) : boolean => {
     const response = request.response && request.response();
     return response && (response.status() === 200 || response.status() === 304);
 };
 
-export function init (puppeteerPage, requests, defaultTimeout) {
+export function init (puppeteerPage: Page, requests, defaultTimeout) : object {
     return {
         /**
          * Wait for a resource request to be responded to
          * @param {string} resource - The URL of the resource (or a substring of it)
          * @param {number] [timeout=defaultTimeout] - Timeout for the check
      */
-        waitForResource (resource, timeout = defaultTimeout) {
+        waitForResource (resource: string, timeout : number = defaultTimeout) {
             return new Promise((resolve, reject) => {
 
-                const resourceRequestHasResponded = () => {
+                const resourceRequestHasResponded = () : boolean => {
                     const resourceRequest = requests && requests.find(r => r.url && r.url().indexOf(resource) !== -1);
                     return isSuccessfulResponse(resourceRequest);
                 };
@@ -62,10 +63,10 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * @param {number} count - The number of web fonts to expect
          * @param {number] [timeout=defaultTimeout] - Timeout for the check
      */
-        async waitForLoadedWebFontCountToBe(count, timeout = defaultTimeout) {
+        async waitForLoadedWebFontCountToBe(count: number, timeout : number = defaultTimeout) {
             let hasInjectedWebFontsAllLoadedFunction = false;
 
-            async function checkWebFontIsLoaded() {
+            async function checkWebFontIsLoaded() : Promise<boolean> {
                 const fontResponses = requests.filter(r => {
                     if (r.resourceType() === 'font') {
                         return isSuccessfulResponse(r);
@@ -76,7 +77,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
 
                 if (fontResponses.length === count) {
                     if (hasInjectedWebFontsAllLoadedFunction) {
-                        return puppeteerPage.evaluate(() => {
+                        return puppeteerPage.evaluate(() : boolean => {
                             return !!window.__webFontsAllLoaded;
                         });
                     } else {
@@ -107,7 +108,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * @param {...args} args - Arguments to be passed into the function
          * @see https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforfunctionpagefunction-options-args
          */
-        async waitForFunction(fn, options, ...args) {
+        async waitForFunction(fn: () => any, options: object, ...args: any[]) {
             const fnStr = serializeFunctionWithArgs(fn, ...args);
             return puppeteerPage.waitForFunction(fnStr, options);
         },
@@ -116,7 +117,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * @param {string} selector - The selector for the element on the page
          * @see https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforselectorselector-options
          */
-        async waitUntilExistsAndVisible(selector) {
+        async waitUntilExistsAndVisible(selector: string) {
             return puppeteerPage.waitForSelector(selector, { visible: true });
         },
         /**
@@ -124,14 +125,14 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * @param {string} selector - The selector for the element on the page
          * @see https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforselectorselector-options
          */
-        async waitWhileExistsAndVisible(selector) {
+        async waitWhileExistsAndVisible(selector: string) {
             return puppeteerPage.waitForSelector(selector, { hidden: true });
         },
         /**
          * Wait until the selector has visible content (i.e. the element takes up some width and height on the page)
          * @param {string} selector - The selector for the element on the page
          */
-        async waitUntilSelectorHasVisibleContent(selector) {
+        async waitUntilSelectorHasVisibleContent(selector: string) {
             return puppeteerPage.waitForFunction(selector => {
                 const elem = document.querySelector(selector);
                 const isVisible = elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length;
@@ -142,7 +143,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * Wait while the selector has visible content (i.e. the element takes up some width and height on the page)
          * @param {string} selector - The selector for the element on the page
          */
-        async waitWhileSelectorHasVisibleContent(selector) {
+        async waitWhileSelectorHasVisibleContent(selector: string) {
             return puppeteerPage.waitForFunction(selector => {
                 const elem = document.querySelector(selector);
                 const isVisible = elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length;
@@ -155,7 +156,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * @param {number} nth - The nth element found by the selector
          * @param {string} attributeName - The attribute name to look for
          */
-        async waitForNthSelectorAttribute(selector, nth, attributeName) {
+        async waitForNthSelectorAttribute(selector: string, nth: number, attributeName: string) {
             return puppeteerPage.waitForFunction((selector, nth, attributeName) => {
                 const element = document.querySelectorAll(selector)[nth - 1];
                 return typeof element.attributes[attributeName] !== 'undefined';
@@ -166,7 +167,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * @param {string} selector - The selector for the element on the page
          * @param {string} attributeName - The attribute name to look for
          */
-        async waitForSelectorAttribute (selector, attributeName) {
+        async waitForSelectorAttribute (selector: string, attributeName: string) {
             return this.waitForNthSelectorAttribute(selector, 1, attributeName);
         },
         /**
@@ -176,7 +177,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * @param {string} attributeName - The attribute name to look for
          * @param {string} attributeValue - The attribute value to match the attributeName
          */
-        async waitForNthSelectorAttributeValue (selector, nth, attributeName, attributeValue) {
+        async waitForNthSelectorAttributeValue (selector: string, nth: number, attributeName: string, attributeValue: string) {
             return puppeteerPage.waitForFunction((selector, nth, attributeName, attributeValue) => {
                 const element = document.querySelectorAll(selector)[nth - 1];
                 return element.attributes[attributeName] && element.attributes[attributeName].value === attributeValue;
@@ -188,7 +189,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * @param {string} attributeName - The attribute name to look for
          * @param {string} attributeValue - The attribute value to match the attributeName
          */
-        async waitForSelectorAttributeValue (selector, attributeName, attributeValue) {
+        async waitForSelectorAttributeValue (selector: string, attributeName: string, attributeValue: string) {
             return this.waitForNthSelectorAttributeValue(selector, 1, attributeName, attributeValue);
         },
         /**
@@ -196,7 +197,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * @param {string} selector - The selector for the element on the page
          * @param {number} expectedCount - The number of elements to expect
          */
-        async waitForElementCount(selector, expectedCount) {
+        async waitForElementCount(selector: string, expectedCount: number) {
             return puppeteerPage.waitForFunction((selector, expectedCount) => {
                 return document.querySelectorAll(selector).length === expectedCount;
             }, { timeout: defaultTimeout}, selector, expectedCount);
@@ -205,7 +206,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * Wait for the document title to be a particular string
          * @param {string} title - The expected title of the document
          */
-        async waitForDocumentTitle(title) {
+        async waitForDocumentTitle(title: string) {
             return puppeteerPage.waitForFunction(title => {
                 const actualTitle = document.title;
                 return actualTitle === title;
@@ -215,7 +216,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * Wait for the current window location to match a particular regular expression
          * @param {RegExp} regex - The regular expression to match the URL on
          */
-        async waitForUrl(regex) {
+        async waitForUrl(regex: RegExp) {
             return this.waitForFunction(regex => {
                 return regex.test(window.location.href);
             }, { timeout: defaultTimeout}, regex);
@@ -224,7 +225,7 @@ export function init (puppeteerPage, requests, defaultTimeout) {
          * Wait for a given number of milliseconds
          * @param {number} milliseconds - The number of milliseconds to wait for
          */
-        async waitFor(milliseconds) {
+        async waitFor(milliseconds: number) {
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve();

@@ -13,8 +13,8 @@
 **/
 
 // Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L205
-const detectType = value => {
-    let s = typeof value;
+const detectType = (value: any) => {
+    let s = typeof value as string;
     if (s === 'object') {
         if (value) {
             if (value instanceof Array) {
@@ -32,7 +32,7 @@ const detectType = value => {
 };
 
 // Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L167
-const quoteString = str => {
+const quoteString = (str: string) => {
     let c, i, l = str.length, o = '"';
     for (i = 0; i < l; i += 1) {
         c = str.charAt(i);
@@ -69,7 +69,7 @@ const quoteString = str => {
 };
 
 // Source: from https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L354-L388
-export function serializeFunctionWithArgs(fn, ...args) {
+export function serializeFunctionWithArgs(fn: any, ...args: any[]) {
     if (!(fn instanceof Function || typeof fn === 'string' || fn instanceof String)) {
         throw Error('Wrong use of evaluate');
     }
