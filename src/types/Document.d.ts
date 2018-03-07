@@ -1,3 +1,3 @@
 interface Document {
-    fonts: any
+    fonts: any;
 }

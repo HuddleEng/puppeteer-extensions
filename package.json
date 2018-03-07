@@ -4,10 +4,17 @@
   "description": "Convenience functions for the Puppeteer",
   "main": "lib/index.js",
   "scripts": {
-    "build": "npm run lint && tsc",
+    "build": "tsc",
     "test": "npm run build && jest /tests",
     "postinstall": "node tests/setup.js",
-    "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts'"
+    "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts'",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "{src}/**/*.ts": [
+      "prettier --write --single-quote",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -25,11 +32,12 @@
     "express": "^4.16.2",
     "extract-zip": "^1.6.6",
     "jest": "^22.4.2",
+    "prettier": "1.11.1",
     "puppeteer": "^1.1.1",
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
+    "tslint-config-airbnb": "^5.7.0",
     "tslint-config-prettier": "^1.9.0",
-    "tslint-config-standard": "^7.0.0",
     "typescript": "^2.7.2"
   }
 }

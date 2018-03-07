@@ -33,9 +33,9 @@ const detectType = (value: any) => {
 
 // Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L167
 const quoteString = (str: string) => {
+    const l = str.length;
     let c;
     let i;
-    let l = str.length;
     let o = '"';
 
     for (i = 0; i < l; i += 1) {
@@ -64,7 +64,9 @@ const quoteString = (str: string) => {
                     break;
                 default:
                     c = c.charCodeAt();
-                    o += '\\u00' + Math.floor(c / 16).toString(16) +
+                    o +=
+                        '\\u00' +
+                        Math.floor(c / 16).toString(16) +
                         (c % 16).toString(16);
             }
         }
@@ -74,34 +76,38 @@ const quoteString = (str: string) => {
 
 // Source: from https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L354-L388
 export function serializeFunctionWithArgs(fn: any, ...args: any[]) {
-    if (!(fn instanceof Function || typeof fn === 'string' || fn instanceof String)) {
+    if (
+        !(
+            fn instanceof Function ||
+            typeof fn === 'string' ||
+            fn instanceof String
+        )
+    ) {
         throw Error('Wrong use of evaluate');
     }
 
     let str = '(function() { return (' + fn.toString() + ')(';
 
     args.forEach(arg => {
-        let argType = detectType(arg);
+        const argType = detectType(arg);
 
         switch (argType) {
-            case 'object':      // < for type "object"
-            case 'array':       // < for type "array"
+            case 'object': // < for type "object"
+            case 'array': // < for type "array"
                 str += JSON.stringify(arg) + ',';
                 break;
-            case 'date':        // < for type "date"
+            case 'date': // < for type "date"
                 str += 'new Date(' + JSON.stringify(arg) + '),';
                 break;
-            case 'string':      // < for type "string"
+            case 'string': // < for type "string"
                 str += quoteString(arg) + ',';
                 break;
-            default:            // for types: "null", "number", "function", "regexp", "undefined"
+            default:
+                // for types: "null", "number", "function", "regexp", "undefined"
                 str += arg + ',';
                 break;
         }
     });
 
     return str.replace(/,$/, '') + '); })()';
-};
-
-
-
+}

@@ -4,10 +4,10 @@
  *
  */
 
-import {serializeFunctionWithArgs} from '../external/serialization-utils';
-import {Page} from "puppeteer";
+import { serializeFunctionWithArgs } from '../external/serialization-utils';
+import { Page } from 'puppeteer';
 
-export function init (puppeteerPage: Page) : object {
+export function init(puppeteerPage: Page): object {
     return {
         /**
          * Turn off CSS animations on the page to help avoid flaky visual comparisons
@@ -15,15 +15,16 @@ export function init (puppeteerPage: Page) : object {
         async turnOffAnimations() {
             return puppeteerPage.evaluate(() => {
                 function disableAnimations() {
-                    const {jQuery} = window;
+                    const { jQuery } = window;
                     if (jQuery) {
                         jQuery.fx.off = true;
                     }
 
                     const css = document.createElement('style');
                     css.type = 'text/css';
-                    css.innerHTML = '* { -webkit-transition: none !important; transition: none !important; -webkit-animation: none !important; animation: none !important; }';
-                    document.body.appendChild( css );
+                    css.innerHTML =
+                        '* { -webkit-transition: none !important; transition: none !important; -webkit-animation: none !important; animation: none !important; }';
+                    document.body.appendChild(css);
                 }
 
                 if (document.readyState !== 'loading') {
@@ -31,7 +32,7 @@ export function init (puppeteerPage: Page) : object {
                 } else {
                     window.addEventListener('load', disableAnimations, false);
                 }
-            })
+            });
         },
         /**
          * Fast forward the current time by a given number of milliseconds
@@ -45,7 +46,9 @@ export function init (puppeteerPage: Page) : object {
                     date: Date;
 
                     constructor() {
-                        this.date = new window.__oldDate((new window.__oldDate()).getTime() + milliseconds);
+                        this.date = new window.__oldDate(
+                            new window.__oldDate().getTime() + milliseconds
+                        );
                     }
 
                     now() {
@@ -65,6 +68,5 @@ export function init (puppeteerPage: Page) : object {
             const fnStr = serializeFunctionWithArgs(fn, ...args);
             return puppeteerPage.evaluate(fnStr);
         }
-    }
-
+    };
 }
