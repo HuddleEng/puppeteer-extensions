@@ -4,6 +4,7 @@
   "description": "Convenience functions for the Puppeteer",
   "main": "lib/index.js",
   "scripts": {
+    "prebuild": "rimraf lib",
     "build": "tsc",
     "test": "npm run build && jest /tests",
     "postinstall": "node tests/setup.js",
