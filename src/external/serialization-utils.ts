@@ -12,8 +12,11 @@
  * Copyright (C) 2012 James M. Greene <james.m.greene@gmail.com>
  */
 
-// Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L205
-const detectType = (value: any) => {
+/**
+ * @hidden
+ * Source: Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L205
+ */
+const detectType = (value: any): string => {
     let s = typeof value as string;
     if (s === 'object') {
         if (value) {
@@ -31,8 +34,11 @@ const detectType = (value: any) => {
     return s;
 };
 
-// Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L167
-const quoteString = (str: string) => {
+/**
+ * @hidden
+ * Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L167
+ */
+const quoteString = (str: string): string => {
     const l = str.length;
     let c;
     let i;
@@ -74,7 +80,13 @@ const quoteString = (str: string) => {
     return o + '"';
 };
 
-// Source: from https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L354-L388
+/**
+ * Serialize the function including any arguments passed in
+ * Source: from https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L354-L388
+ * @param fn
+ * @param args
+ * @returns {string}
+ */
 export function serializeFunctionWithArgs(fn: any, ...args: any[]) {
     if (
         !(
