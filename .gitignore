@@ -1,5 +1,9 @@
-.idea/
+.idea
+.vscode
 .DS_Store
-node_modules/
+.npm
+.env
+npm-debug.log
+node_modules
 tests/todomvc-react/
 lib

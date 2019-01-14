@@ -1,5 +1,6 @@
+import { ElementHandle, Page, Request, Response } from 'puppeteer';
 import { serializeFunctionWithArgs } from './external/serialization-utils';
-import { Request, Page, Response, ElementHandle } from 'puppeteer';
+import HackyDate from './HackyDate';
 
 /**
  * @hidden
@@ -44,7 +45,6 @@ const isSuccessfulResponse = (request: Request): boolean => {
     return false;
 };
 
-
 export default class Extensions {
     private puppeteerPage: Page;
     private resourceRequests: Request[] = [];
@@ -65,13 +65,15 @@ export default class Extensions {
      * @param {number} timeout [timeout=defaultTimeout] - Timeout for the checks
      * @returns {Promise<any>}
      */
-    waitForResource(resource: string, timeout: number = this.defaultTimeout) {
+    public waitForResource(
+        resource: string,
+        timeout: number = this.defaultTimeout
+    ) {
         return new Promise((resolve, reject) => {
             const resourceRequestHasResponded = (): boolean => {
-                const resourceRequest =
-                    this.resourceRequests.find(
-                        r => r.url().indexOf(resource) !== -1
-                    );
+                const resourceRequest = this.resourceRequests.find(
+                    r => r.url().indexOf(resource) !== -1
+                );
                 if (resourceRequest) {
                     return isSuccessfulResponse(resourceRequest);
                 }
@@ -83,11 +85,11 @@ export default class Extensions {
                 resolve();
             } else {
                 pollFor({
-                    timeout,
                     checkFn: async () => {
                         return resourceRequestHasResponded();
                     },
                     interval: 100,
+                    timeout,
                     timeoutMsg: 'Timeout waiting for resource match.'
                 })
                     .then(resolve)
@@ -102,7 +104,7 @@ export default class Extensions {
      * @param {number} timeout [timeout=defaultTimeout] - Timeout for the check
      * @returns {Promise<string>}
      */
-    async waitForLoadedWebFontCountToBe(
+    public async waitForLoadedWebFontCountToBe(
         count: number,
         timeout: number = this.defaultTimeout
     ) {
@@ -119,16 +121,18 @@ export default class Extensions {
 
             if (fontResponses.length === count) {
                 if (hasInjectedWebFontsAllLoadedFunction) {
-                    return this.puppeteerPage.evaluate((): boolean => {
-                        return !!window.__webFontsAllLoaded;
-                    });
+                    return this.puppeteerPage.evaluate(
+                        (): boolean => {
+                            return !!window.__webFontsAllLoaded;
+                        }
+                    );
                 }
 
                 await this.puppeteerPage.evaluate(() => {
-                    return (async function() {
+                    return (async () => {
                         try {
-                            window.__webFontsAllLoaded = await document
-                                .fonts.ready;
+                            window.__webFontsAllLoaded = await document.fonts
+                                .ready;
                         } catch (e) {
                             return false;
                         }
@@ -143,9 +147,9 @@ export default class Extensions {
         }
 
         return pollFor({
-            timeout,
             checkFn: checkWebFontIsLoaded,
             interval: 100,
+            timeout,
             timeoutMsg: `Timeout waiting for ${count} web font responses`
         });
     }
@@ -158,7 +162,11 @@ export default class Extensions {
      * @returns {Promise<any>}
      * @see https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforfunctionpagefunction-options-args
      */
-    async waitForFunction(fn: () => any, options: object, ...args: any[]) {
+    public async waitForFunction(
+        fn: () => any,
+        options: object,
+        ...args: any[]
+    ) {
         const fnStr = serializeFunctionWithArgs(fn, ...args);
         return this.puppeteerPage.waitForFunction(fnStr, options);
     }
@@ -169,7 +177,9 @@ export default class Extensions {
      * @returns {Promise<ElementHandle>}
      * @see https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforselectorselector-options
      */
-    async waitUntilExistsAndVisible(selector: string) : Promise<ElementHandle>{
+    public async waitUntilExistsAndVisible(
+        selector: string
+    ): Promise<ElementHandle> {
         return this.puppeteerPage.waitForSelector(selector, { visible: true });
     }
 
@@ -179,7 +189,9 @@ export default class Extensions {
      * @returns {Promise<ElementHandle>}
      * @see https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagewaitforselectorselector-options
      */
-    async waitWhileExistsAndVisible(selector: string) : Promise<ElementHandle>{
+    public async waitWhileExistsAndVisible(
+        selector: string
+    ): Promise<ElementHandle> {
         return this.puppeteerPage.waitForSelector(selector, { hidden: true });
     }
 
@@ -188,10 +200,10 @@ export default class Extensions {
      * @param {string} selector - The selector for the element on the page
      * @returns {Promise<any>}
      */
-    async waitUntilSelectorHasVisibleContent(selector: string) {
+    public async waitUntilSelectorHasVisibleContent(selector: string) {
         return this.puppeteerPage.waitForFunction(
-            selector => {
-                const elem = document.querySelector(selector);
+            s => {
+                const elem = document.querySelector(s);
                 const isVisible =
                     elem.offsetWidth ||
                     elem.offsetHeight ||
@@ -208,10 +220,10 @@ export default class Extensions {
      * @param {string} selector - The selector for the element on the page
      * @returns {Promise<any>}
      */
-    async waitWhileSelectorHasVisibleContent(selector: string) {
+    public async waitWhileSelectorHasVisibleContent(selector: string) {
         return this.puppeteerPage.waitForFunction(
-            selector => {
-                const elem = document.querySelector(selector);
+            s => {
+                const elem = document.querySelector(s);
                 const isVisible =
                     elem.offsetWidth ||
                     elem.offsetHeight ||
@@ -230,19 +242,15 @@ export default class Extensions {
      * @param {string} attributeName - The attribute name to look for
      * @returns {Promise<any>}
      */
-    async waitForNthSelectorAttribute(
+    public async waitForNthSelectorAttribute(
         selector: string,
         nth: number,
         attributeName: string
     ) {
         return this.puppeteerPage.waitForFunction(
-            (selector, nth, attributeName) => {
-                const element = document.querySelectorAll(selector)[
-                nth - 1
-                    ];
-                return (
-                    typeof element.attributes[attributeName] !== 'undefined'
-                );
+            (s, n, a) => {
+                const element = document.querySelectorAll(s)[n - 1];
+                return typeof element.attributes[a] !== 'undefined';
             },
             { timeout: this.defaultTimeout },
             selector,
@@ -257,7 +265,7 @@ export default class Extensions {
      * @param {string} attributeName - The attribute name to look for
      * @returns {Promise<Promise<any>>}
      */
-    async waitForSelectorAttribute(
+    public async waitForSelectorAttribute(
         selector: string,
         attributeName: string
     ) {
@@ -272,21 +280,17 @@ export default class Extensions {
      * @param {string} attributeValue - The attribute value to match the attributeName
      * @returns {Promise<any>}
      */
-    async waitForNthSelectorAttributeValue(
+    public async waitForNthSelectorAttributeValue(
         selector: string,
         nth: number,
         attributeName: string,
         attributeValue: string
     ) {
         return this.puppeteerPage.waitForFunction(
-            (selector, nth, attributeName, attributeValue) => {
-                const element = document.querySelectorAll(selector)[
-                nth - 1
-                    ];
+            (s, n, a, v) => {
+                const element = document.querySelectorAll(s)[n - 1];
                 return (
-                    element.attributes[attributeName] &&
-                    element.attributes[attributeName].value ===
-                    attributeValue
+                    element.attributes[a] && element.attributes[a].value === v
                 );
             },
             { timeout: this.defaultTimeout },
@@ -304,7 +308,7 @@ export default class Extensions {
      * @param {string} attributeValue - The attribute value to match the attributeName
      * @returns {Promise<Promise<any>>}
      */
-    async waitForSelectorAttributeValue(
+    public async waitForSelectorAttributeValue(
         selector: string,
         attributeName: string,
         attributeValue: string
@@ -323,13 +327,10 @@ export default class Extensions {
      * @param {number} expectedCount - The number of elements to expect
      * @returns {Promise<any>}
      */
-    async waitForElementCount(selector: string, expectedCount: number) {
+    public async waitForElementCount(selector: string, expectedCount: number) {
         return this.puppeteerPage.waitForFunction(
-            (selector, expectedCount) => {
-                return (
-                    document.querySelectorAll(selector).length ===
-                    expectedCount
-                );
+            (s, c) => {
+                return document.querySelectorAll(s).length === c;
             },
             { timeout: this.defaultTimeout },
             selector,
@@ -342,11 +343,11 @@ export default class Extensions {
      * @param {string} title - The expected title of the document
      * @returns {Promise<any>}
      */
-    async waitForDocumentTitle(title: string) {
+    public async waitForDocumentTitle(title: string) {
         return this.puppeteerPage.waitForFunction(
-            title => {
+            t => {
                 const actualTitle = document.title;
-                return actualTitle === title;
+                return actualTitle === t;
             },
             { timeout: this.defaultTimeout },
             title
@@ -358,10 +359,10 @@ export default class Extensions {
      * @param {RegExp} regex - The regular expression to match the URL on
      * @returns {Promise<Promise<Promise<any>> | Promise<any>>}
      */
-    async waitForUrl(regex: RegExp) {
+    public async waitForUrl(regex: RegExp) {
         return this.puppeteerPage.waitForFunction(
-            regex => {
-                return regex.test(window.location.href);
+            r => {
+                return r.test(window.location.href);
             },
             { timeout: this.defaultTimeout },
             regex
@@ -373,7 +374,7 @@ export default class Extensions {
      * @param {number} milliseconds - The number of milliseconds to wait for
      * @returns {Promise<any>}
      */
-    async waitFor(milliseconds: number) {
+    public async waitFor(milliseconds: number) {
         return new Promise(resolve => {
             setTimeout(() => {
                 resolve();
@@ -386,9 +387,9 @@ export default class Extensions {
      * @param {string} selector - The selector for the element to get the value for
      * @returns {Promise<string>} - The value property value for the element
      */
-    async getValue(selector: string): Promise<string> {
-        return this.puppeteerPage.evaluate(selector => {
-            return document.querySelector(selector).value;
+    public async getValue(selector: string): Promise<string> {
+        return this.puppeteerPage.evaluate(s => {
+            return document.querySelector(s).value;
         }, selector);
     }
 
@@ -397,9 +398,9 @@ export default class Extensions {
      * @param {string} selector - The selector for the element to get the text for
      * @returns {Promise<string>} - The text property value for the element
      */
-    async getText(selector: string): Promise<string> {
-        return this.puppeteerPage.evaluate(selector => {
-            return document.querySelector(selector).textContent;
+    public async getText(selector: string): Promise<string> {
+        return this.puppeteerPage.evaluate(s => {
+            return document.querySelector(s).textContent;
         }, selector);
     }
 
@@ -409,15 +410,15 @@ export default class Extensions {
      * @param {string} property  - The property to look for
      * @returns {Promise<string>} - The property value for the element
      */
-    async getPropertyValue(
+    public async getPropertyValue(
         selector: string,
         property: string
     ): Promise<string> {
         try {
             return this.puppeteerPage.evaluate(
-                (selector, property) => {
-                    const element = document.querySelector(selector);
-                    return element[property];
+                (s, p) => {
+                    const element = document.querySelector(s);
+                    return element[p];
                 },
                 selector,
                 property
@@ -432,9 +433,9 @@ export default class Extensions {
      * @param {string} selector - The selector of the element to check for focus state
      * @returns {Promise<boolean>} - Whether the element is focused or not
      */
-    async isElementFocused(selector: string): Promise<boolean> {
-        return this.puppeteerPage.evaluate(selector => {
-            const element = document.querySelector(selector);
+    public async isElementFocused(selector: string): Promise<boolean> {
+        return this.puppeteerPage.evaluate(s => {
+            const element = document.querySelector(s);
             return element === document.activeElement;
         }, selector);
     }
@@ -443,7 +444,7 @@ export default class Extensions {
      * Turn off CSS animations on the page to help avoid flaky visual comparisons
      * @returns {Promise<any>}
      */
-    async turnOffAnimations() {
+    public async turnOffAnimations() {
         return this.puppeteerPage.evaluate(() => {
             function disableAnimations() {
                 const { jQuery } = window;
@@ -471,25 +472,10 @@ export default class Extensions {
      * @param {number} milliseconds - The number of milliseconds to fast forward
      * @returns {Promise<any>}
      */
-    async fastForwardTime(milliseconds: number) {
-        return this.puppeteerPage.evaluate(milliseconds => {
+    public async fastForwardTime(milliseconds: number) {
+        return this.puppeteerPage.evaluate(m => {
             window.__oldDate = Date;
-
-            class HackyDate {
-                date: Date;
-
-                constructor() {
-                    this.date = new window.__oldDate(
-                        new window.__oldDate().getTime() + milliseconds
-                    );
-                }
-
-                now() {
-                    return this.date.getTime();
-                }
-            }
-
-            window.Date = HackyDate;
+            window.Date = HackyDate.bind(HackyDate, m);
         }, milliseconds);
     }
 
@@ -499,7 +485,7 @@ export default class Extensions {
      * @param args - Arguments to be passed into the function
      * @returns {Promise<any>}
      */
-    async evaluate(fn: () => any, ...args: any[]) {
+    public async evaluate(fn: () => any, ...args: any[]) {
         const fnStr = serializeFunctionWithArgs(fn, ...args);
         return this.puppeteerPage.evaluate(fnStr);
     }
@@ -507,7 +493,7 @@ export default class Extensions {
     /**
      * Resets the resource requests cache for the page
      */
-    resetResourceRequests() : void {
+    public resetResourceRequests(): void {
         this.resourceRequests = [];
     }
 }

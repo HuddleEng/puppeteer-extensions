@@ -1,15 +1,12 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "module": "commonjs",
-    "lib": ["es2015", "es2016", "es2017", "dom"],
-    "outDir": "lib",
-    "sourceMap": true,
-    "target": "es2017",
-    "strictNullChecks": true
-  },
-  "include": [
-    "src",
-    "node_modules/@types/puppeteer/index.d.ts"
-  ]
+    "compilerOptions": {
+        "declaration": true,
+        "module": "commonjs",
+        "lib": ["es2015", "es2016", "es2017", "dom"],
+        "outDir": "lib",
+        "sourceMap": true,
+        "target": "es2017",
+        "strictNullChecks": true
+    },
+    "include": ["src", "node_modules/@types/puppeteer/index.d.ts"]
 }

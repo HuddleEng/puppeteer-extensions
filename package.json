@@ -1,46 +1,46 @@
 {
-  "name": "puppeteer-extensions",
-  "version": "1.0.0",
-  "description": "Convenience functions for the Puppeteer",
-  "main": "lib/index.js",
-  "scripts": {
-    "prebuild": "rimraf lib",
-    "build": "tsc && typedoc --out docs --target es6 --theme minimal --mode file src",
-    "test": "npm run build && jest /tests",
-    "postinstall": "node tests/setup.js",
-    "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts'",
-    "precommit": "lint-staged"
-  },
-  "lint-staged": {
-    "src/**/*.ts": [
-      "prettier --write --single-quote",
-      "git add"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/HuddleEng/puppeteer-extensions.git"
-  },
-  "author": "Gideon Pyzer / Huddle",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/HuddleEng/puppeteer-extensions/issues"
-  },
-  "homepage": "https://github.com/HuddleEng/puppeteer-extensions#readme",
-  "devDependencies": {
-    "@types/puppeteer": "^1.11.1",
-    "colors": "^1.3.3",
-    "express": "^4.16.4",
-    "extract-zip": "^1.6.7",
-    "jest": "^23.6.0",
-    "prettier": "^1.15.3",
-    "puppeteer": "^1.11.0",
-    "rimraf": "^2.6.3",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.12.1",
-    "tslint-config-airbnb": "^5.11.1",
-    "tslint-config-prettier": "^1.17.0",
-    "typedoc": "^0.14.1",
-    "typescript": "^3.2.2"
-  }
+    "name": "puppeteer-extensions",
+    "version": "1.0.0",
+    "description": "Convenience functions for the Puppeteer",
+    "main": "lib/index.js",
+    "scripts": {
+        "prebuild": "rimraf lib",
+        "build": "tsc && typedoc --out docs --target es6 --theme minimal --mode file src",
+        "test": "npm run build && jest /tests",
+        "postinstall": "node tests/setup.js",
+        "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts'",
+        "precommit": "lint-staged"
+    },
+    "lint-staged": {
+        "src/**/*.ts": [
+            "prettier --write --single-quote",
+            "git add"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/HuddleEng/puppeteer-extensions.git"
+    },
+    "author": "Gideon Pyzer / Huddle",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/HuddleEng/puppeteer-extensions/issues"
+    },
+    "homepage": "https://github.com/HuddleEng/puppeteer-extensions#readme",
+    "devDependencies": {
+        "@types/puppeteer": "^1.11.1",
+        "colors": "^1.3.3",
+        "express": "^4.16.4",
+        "extract-zip": "^1.6.7",
+        "jest": "^23.6.0",
+        "prettier": "^1.15.3",
+        "puppeteer": "^1.11.0",
+        "rimraf": "^2.6.3",
+        "ts-node": "^7.0.1",
+        "tslint": "^5.12.1",
+        "tslint-config-airbnb": "^5.11.1",
+        "tslint-config-prettier": "^1.17.0",
+        "typedoc": "^0.14.1",
+        "typescript": "^3.2.2"
+    }
 }
