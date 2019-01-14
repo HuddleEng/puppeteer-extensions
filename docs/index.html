@@ -931,15 +931,14 @@ img { max-width: 100%; }
 		<div class="tsd-panel tsd-typography">
 			<h1 id="puppeteer-extensions">puppeteer-extensions</h1>
 			<p><a href="https://travis-ci.org/HuddleEng/puppeteer-extensions"><img src="https://travis-ci.org/HuddleEng/puppeteer-extensions.svg?branch=master" alt="Build Status"></a></p>
-			<p>This library exposes a number of convenience functions to extend Puppeteer&#39;s API, in order to make writing tests easier.
-				The idea is that many of these functions (or similar ones) will eventually make their way into Puppeteer&#39;s own API, but
-			this allows us to experiment with new ways of improving UI testing.</p>
+			<p>Provides extension functions for working with Puppeteer, in order to make writing tests easier.</p>
 			<h2 id="usage">Usage</h2>
 			<ul>
 				<li><code>page</code> Puppeteer page instance</li>
 				<li><code>timeout</code> [Optional] Timeout for waits in milliseconds (default: 5000 ms)</li>
 			</ul>
 			<pre><code class="language-javascript"><span class="hljs-keyword">const</span> extensions = <span class="hljs-built_in">require</span>(<span class="hljs-string">'puppeteer-extensions'</span>)(page);</code></pre>
+			<p><strong>Example:</strong></p>
 			<pre><code class="language-javascript">(<span class="hljs-keyword">async</span>() {
     <span class="hljs-keyword">const</span> listItem = <span class="hljs-string">'.todo-list li'</span>;
     ...
@@ -983,7 +982,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">DEFAULT_<wbr>TIMEOUT_<wbr>MS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;5000</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/HuddleEng/puppeteer-extensions/blob/01fc503/src/index.ts#L3">index.ts:3</a></li>
+						<li>Defined in <a href="https://github.com/HuddleEng/puppeteer-extensions/blob/526e451/src/index.ts#L3">index.ts:3</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1000,7 +999,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/HuddleEng/puppeteer-extensions/blob/01fc503/src/index.ts#L10">index.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/HuddleEng/puppeteer-extensions/blob/526e451/src/index.ts#L10">index.ts:10</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1033,7 +1032,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/HuddleEng/puppeteer-extensions/blob/01fc503/src/external/Serialization.ts#L90">external/Serialization.ts:90</a></li>
+								<li>Defined in <a href="https://github.com/HuddleEng/puppeteer-extensions/blob/526e451/src/external/Serialization.ts#L90">external/Serialization.ts:90</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
