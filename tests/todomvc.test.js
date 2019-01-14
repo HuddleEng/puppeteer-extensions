@@ -8,10 +8,7 @@ const secondItem = listItem + ':nth-of-type(2)';
 const secondItemInput = secondItem + ' > input';
 const todoCount = '.todo-count';
 
-let extensions;
-
 beforeAll(async () => {
-    extensions = require('../lib/index')(page);
     await page.goto('http://localhost:3000');
 });
 
