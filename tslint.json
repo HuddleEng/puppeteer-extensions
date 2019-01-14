@@ -5,5 +5,14 @@
     "extends": ["tslint:latest", "tslint-config-prettier"],
     "rules": {
         "no-implicit-dependencies": [true, "dev"]
+    },
+    "env": {
+        "jest": true
+    },
+    "globals": {
+        "page": true,
+        "browser": true,
+        "context": true,
+        "jestPuppeteer": true
     }
 }

@@ -1,5 +1,5 @@
 import { ElementHandle, Page, Request, Response } from 'puppeteer';
-import { serializeFunctionWithArgs } from './external/serialization-utils';
+import { serializeFunctionWithArgs } from './external/Serialization';
 import HackyDate from './HackyDate';
 
 /**
