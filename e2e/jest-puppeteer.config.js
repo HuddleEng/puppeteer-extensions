@@ -1,6 +1,6 @@
 module.exports = {
     server: {
-        command: 'node tests/server.js',
+        command: 'node e2e/server.js',
         port: 3000
     }
 };

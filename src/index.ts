@@ -1,17 +1,18 @@
+import { Page } from 'puppeteer';
 import Extensions from './Extensions';
 
 const DEFAULT_TIMEOUT_MS: number = 5000;
 
 /**
  * Initialize puppeteer extensions
- * @param puppeteerInstance
+ * @param puppeteerPage
  * @param {number} timeout
  */
-function init(
-    puppeteerInstance: any,
+const init = (
+    puppeteerPage: Page,
     timeout: number = DEFAULT_TIMEOUT_MS
-): any {
-    return new Extensions(puppeteerInstance, timeout);
-}
+): Extensions => {
+    return new Extensions(puppeteerPage, timeout);
+};
 
 export = init;
