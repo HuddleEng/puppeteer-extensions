@@ -3,9 +3,7 @@ import { Request, Response } from 'puppeteer';
 /**
  * @hidden
  */
-const isSuccessfulResponse = (request: Request): boolean => {
-    const response: Response | null = request.response();
-
+const isSuccessfulResponse = (response: Response): boolean => {
     if (response) {
         return response.status() === 200 || response.status() === 304;
     }

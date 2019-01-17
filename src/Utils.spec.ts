@@ -1,27 +1,23 @@
-import { Request } from 'puppeteer';
+import { Response } from 'puppeteer';
 import { isSuccessfulResponse, pollFor } from './Utils';
 
 describe('Utils', () => {
     describe('isSuccessfulResponse', () => {
         const mockRequestWithStatus = (status: number) => {
-            return jest.fn<Request>(() => ({
-                response: jest.fn(() => {
-                    return {
-                        status: () => status
-                    };
-                })
+            return jest.fn<Response>(() => ({
+                status: () => status
             }));
         };
 
         it('correctly determines successful response', () => {
-            let MockRequest = mockRequestWithStatus(200);
-            expect(isSuccessfulResponse(new MockRequest())).toBe(true);
-            MockRequest = mockRequestWithStatus(304);
-            expect(isSuccessfulResponse(new MockRequest())).toBe(true);
+            let MockResponse = mockRequestWithStatus(200);
+            expect(isSuccessfulResponse(new MockResponse())).toBe(true);
+            MockResponse = mockRequestWithStatus(304);
+            expect(isSuccessfulResponse(new MockResponse())).toBe(true);
         });
         it('correctly determines unsuccessful response', () => {
-            const MockRequest = mockRequestWithStatus(500);
-            expect(isSuccessfulResponse(new MockRequest())).toBe(false);
+            const MockResponse = mockRequestWithStatus(500);
+            expect(isSuccessfulResponse(new MockResponse())).toBe(false);
         });
     });
 

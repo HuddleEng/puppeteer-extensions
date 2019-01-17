@@ -27,33 +27,12 @@ export default class Extensions {
         resource: string,
         timeout: number = this.defaultTimeout
     ) {
-        return new Promise((resolve, reject) => {
-            const resourceRequestHasResponded = (): boolean => {
-                const resourceRequest = this.resourceRequests.find(
-                    r => r.url().indexOf(resource) !== -1
-                );
-                if (resourceRequest) {
-                    return isSuccessfulResponse(resourceRequest);
-                }
-
-                return false;
-            };
-
-            if (resourceRequestHasResponded()) {
-                resolve();
-            } else {
-                pollFor({
-                    checkFn: async () => {
-                        return resourceRequestHasResponded();
-                    },
-                    interval: 100,
-                    timeout,
-                    timeoutMsg: 'Timeout waiting for resource match.'
-                })
-                    .then(resolve)
-                    .catch(reject);
-            }
-        });
+        return this.puppeteerPage.waitForResponse(
+            response =>
+                response.url().indexOf(resource) > -1 &&
+                isSuccessfulResponse(response),
+            { timeout }
+        );
     }
 
     /**
