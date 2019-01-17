@@ -11,7 +11,7 @@
         "e2e": "cross-env JEST_PUPPETEER_CONFIG=e2e/jest-puppeteer.config.js jest /e2e -c e2e/jest.e2e.config.js",
         "build-and-e2e": "npm run build && npm run e2e",
         "build-and-test": "npm run build && npm run test",
-        "postinstall": "node tests/setup.js",
+        "postinstall": "node e2e/setup.js",
         "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts'",
         "precommit": "lint-staged"
     },

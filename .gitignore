@@ -5,5 +5,5 @@
 .env
 npm-debug.log
 node_modules
-tests/todomvc-react/
+e2e/todomvc-react/
 lib
