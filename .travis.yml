@@ -1,4 +1,11 @@
 sudo: required
 language: node_js
 node_js:
-  - "node"
+    - 'node'
+jobs:
+    include:
+        - stage: 'Tests'
+          name: 'Unit'
+          script: npm run build-and-test
+        - name: 'End-to-end'
+          script: npm run build-and-e2e

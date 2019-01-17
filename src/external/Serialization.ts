@@ -10,11 +10,14 @@
  * Copyright (C) 2011 James Roe <roejames12@hotmail.com>
  * Copyright (C) 2011 execjosh, http://execjosh.blogspot.com
  * Copyright (C) 2012 James M. Greene <james.m.greene@gmail.com>
-**/
+ */
 
-// Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L205
-const detectType = value => {
-    let s = typeof value;
+/**
+ * @hidden
+ * Source: Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L205
+ */
+const detectType = (value: any): string => {
+    let s = typeof value as string;
     if (s === 'object') {
         if (value) {
             if (value instanceof Array) {
@@ -31,9 +34,16 @@ const detectType = value => {
     return s;
 };
 
-// Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L167
-const quoteString = str => {
-    let c, i, l = str.length, o = '"';
+/**
+ * @hidden
+ * Source: https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L167
+ */
+const quoteString = (str: string): string => {
+    const l = str.length;
+    let c;
+    let i;
+    let o = '"';
+
     for (i = 0; i < l; i += 1) {
         c = str.charAt(i);
         if (c >= ' ') {
@@ -60,7 +70,9 @@ const quoteString = str => {
                     break;
                 default:
                     c = c.charCodeAt();
-                    o += '\\u00' + Math.floor(c / 16).toString(16) +
+                    o +=
+                        '\\u00' +
+                        Math.floor(c / 16).toString(16) +
                         (c % 16).toString(16);
             }
         }
@@ -68,36 +80,46 @@ const quoteString = str => {
     return o + '"';
 };
 
-// Source: from https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L354-L388
-module.exports = function serializeFunctionWithArgs(fn, ...args) {
-    if (!(fn instanceof Function || typeof fn === 'string' || fn instanceof String)) {
+/**
+ * Serialize the function including any arguments passed in
+ * Source: from https://github.com/ariya/phantomjs/blob/master/src/modules/webpage.js#L354-L388
+ * @param fn
+ * @param args
+ * @returns {string}
+ */
+export function serializeFunctionWithArgs(fn: any, ...args: any[]) {
+    if (
+        !(
+            fn instanceof Function ||
+            typeof fn === 'string' ||
+            fn instanceof String
+        )
+    ) {
         throw Error('Wrong use of evaluate');
     }
 
     let str = '(function() { return (' + fn.toString() + ')(';
 
     args.forEach(arg => {
-        let argType = detectType(arg);
+        const argType = detectType(arg);
 
         switch (argType) {
-            case 'object':      //< for type "object"
-            case 'array':       //< for type "array"
+            case 'object': // < for type "object"
+            case 'array': // < for type "array"
                 str += JSON.stringify(arg) + ',';
                 break;
-            case 'date':        //< for type "date"
+            case 'date': // < for type "date"
                 str += 'new Date(' + JSON.stringify(arg) + '),';
                 break;
-            case 'string':      //< for type "string"
+            case 'string': // < for type "string"
                 str += quoteString(arg) + ',';
                 break;
-            default:            // for types: "null", "number", "function", "regexp", "undefined"
+            default:
+                // for types: "null", "number", "function", "regexp", "undefined"
                 str += arg + ',';
                 break;
         }
     });
 
     return str.replace(/,$/, '') + '); })()';
-};
-
-
-
+}
