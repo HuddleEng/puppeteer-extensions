@@ -1,6 +1,6 @@
 {
   "name": "puppeteer-extensions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convenience functions for the Puppeteer",
   "main": "index.js",
   "scripts": {
