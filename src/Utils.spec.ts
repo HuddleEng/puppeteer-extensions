@@ -4,9 +4,12 @@ import { isSuccessfulResponse, pollFor } from './Utils';
 describe('Utils', () => {
     describe('isSuccessfulResponse', () => {
         const mockRequestWithStatus = (status: number) => {
-            return jest.fn<Response>(() => ({
-                status: () => status
-            }));
+            return jest.fn<Response, any[]>(
+                () =>
+                    ({
+                        status: () => status
+                    } as Response)
+            );
         };
 
         it('correctly determines successful response', () => {

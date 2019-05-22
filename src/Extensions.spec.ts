@@ -1,47 +1,27 @@
-import * as puppeteer from 'puppeteer';
 import Extensions from './Extensions';
-
-jest.setTimeout(10000);
+import page from './mocks/page';
 
 describe('Extensions', () => {
     describe('waitForResource', () => {
-        let browser;
-
-        beforeAll(async () => {
-            browser = await puppeteer.launch();
-        });
-
-        it('should respond with true if resource response is found', async () => {
-            const page = await browser.newPage();
-
+        it('should respond with Response object if resource response is found', async () => {
             const extensions = new Extensions(page, 10000);
-            const response = extensions.waitForResource('main');
-
-            await page.goto('https://www.gideonpyzer.com');
-
-            await response;
+            const response = await extensions.waitForResource('main');
             expect(response).toBeTruthy();
         });
 
         it('should timeout when waiting for resource that will not be requested for', async () => {
-            const page = await browser.newPage();
-
             const extensions = new Extensions(page, 10000);
-            const response = extensions.waitForResource('bla', 500);
-
-            await page.goto('https://www.gideonpyzer.com');
 
             try {
-                await response;
-            } catch (e) {
-                expect(e.message).toBe(
-                    'Timeout exceeded while waiting for event'
-                );
+                await extensions.waitForResource('bla', 500);
+            } catch (msg) {
+                expect(msg).toBe('Timeout exceeded while waiting for event');
             }
         });
+    });
+    describe('waitForLoadedWebFontCountToBe', () => {
+        if ('should return true when all web fonts are loaded', async() => {
 
-        afterAll(async () => {
-            browser.close();
-        });
+        })
     });
 });

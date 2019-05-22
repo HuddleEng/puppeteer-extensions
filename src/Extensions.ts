@@ -299,10 +299,10 @@ export default class Extensions {
     public async waitForUrl(regex: RegExp) {
         return this.puppeteerPage.waitForFunction(
             r => {
-                return r.test(window.location.href);
+                return new RegExp(r).test(window.location.href);
             },
             { timeout: this.defaultTimeout },
-            regex
+            String(regex)
         );
     }
 
